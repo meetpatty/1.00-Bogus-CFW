@@ -57,6 +57,29 @@ void clearCaches(void)
     sceKernelIcacheInvalidateAll();
 }
 
+char *vsh_filename;
+int *vsh_args;
+void **vsh_argp;
+
+int (*setupVshParamArgs)(char *filename);
+
+char buf[256];
+
+int setupVshParamArgsPatched()
+{
+    int len;
+
+    len = sce_paf_private_strlen(vsh_filename);
+    *vsh_args = len + 1;
+    *vsh_argp = sce_paf_private_malloc(*vsh_args);
+    sce_paf_private_memset(*vsh_argp, 0, *vsh_args);
+    sce_paf_private_snprintf(*vsh_argp, *vsh_args, vsh_filename);
+    
+    strncpy(vsh_filename, *vsh_argp, 0x80);
+
+    return 0;
+}
+
 int OnModuleStart(SceModule *mod)
 {
 	if (strcmp(mod->modname, "game_plugin_module") == 0)
@@ -66,6 +89,17 @@ int OnModuleStart(SceModule *mod)
 
         clearCaches();
 	}
+    else if (strcmp(mod->modname, "vsh_module") == 0) {
+
+        setupVshParamArgs = mod->text_addr + 0x2cfc;
+        MAKE_CALL(mod->text_addr + 0x3108, setupVshParamArgsPatched);
+
+        vsh_filename = mod->text_addr + 0x1a8c0;
+        vsh_args = mod->text_addr + 0x1a948;
+        vsh_argp = mod->text_addr + 0x1a94c;
+
+        clearCaches();
+    }
 
 	if (!previous)
 		return 0;

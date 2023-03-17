@@ -1,5 +1,5 @@
 TARGET = vshex
-OBJS = main.o SystemCtrlForUser.o
+OBJS = main.o imports.o
 
 BUILD_PRX=1
 PRX_EXPORTS=exports.exp
