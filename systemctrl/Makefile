@@ -1,5 +1,5 @@
 TARGET = systemctrl
-OBJS = main.o systemctrl.o
+OBJS = main.o systemctrl.o nidresolver.o
 
 BUILD_PRX=1
 PRX_EXPORTS=exports.exp

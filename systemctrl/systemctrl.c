@@ -1,5 +1,7 @@
 #include <pspthreadman_kernel.h>
 
+#include <string.h>
+
 #include "../include/systemctrl.h"
 
 STMOD_HANDLER stmod_handler = NULL;
