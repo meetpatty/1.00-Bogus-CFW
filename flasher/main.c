@@ -27,6 +27,8 @@ void ErrorExit(int milisecs, char *fmt, ...)
 	vsprintf(msg, fmt, list);
 	va_end(list);
 
+	pspDebugScreenSetTextColor(0x000000FF);
+
 	printf(msg);
 
 	sceKernelDelayThread(milisecs*1000);
@@ -120,11 +122,36 @@ void flash_file(char *file, char *buf, int size)
 	// else { better not to think we are going end here :P }
 }
 
+int is_bogus(void)
+{
+	SceIoStat stat;
+	int ins;
+
+	ins = *(int*)sceKernelDevkitVersion;
+
+	//Vanilla 1.00 Bogus sysmem doesn't implement sceKernelDevkitVersion
+	if (ins != 0x3E00008)
+	{
+		if (sceKernelDevkitVersion() != 0x00100000)
+			return 0;
+	}
+
+	memset(&stat, 0, sizeof(stat));
+	
+	if (sceIoGetstat("flash0:/kd/loadcorei.prx", &stat) < 0)
+		return 0;
+
+	return 1;
+}
+
 int main()
 {
 	pspDebugScreenInit();
 	pspDebugScreenClear();
 	pspDebugScreenSetTextColor(0x0000FF00);
+
+	if (!is_bogus())
+		ErrorExit(4000, "This installer can only be run on 1.00 Bogus.\n");
 
 	printf("Copying vshmain.prx as vshmain_real.prx.\n");
 	copy_vshmain();
