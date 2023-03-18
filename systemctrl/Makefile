@@ -13,5 +13,10 @@ ASFLAGS = $(CFLAGS)
 
 LIBDIR =
 
+all: rebootex.h $(TARGET).prx
+
+rebootex.h:
+	bin2c ../rebootex/rebootex.bin rebootex.h rebootex_buffer
+
 PSPSDK=$(shell psp-config --pspsdk-path)
 include $(PSPSDK)/lib/build.mak
