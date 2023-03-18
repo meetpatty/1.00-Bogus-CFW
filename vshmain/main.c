@@ -1,6 +1,7 @@
 #include <pspsdk.h>
 #include <pspkernel.h>
 #include <psputilsforkernel.h>
+#include <pspctrl.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -20,19 +21,25 @@ void DummyVshBridgeDep()
 
 int main_thread(SceSize args, void *argp)
 {
+	SceCtrlData pad;
 	SceUID mod;
 
 	pspSdkInstallNoDeviceCheckPatch();
 	pspSdkInstallNoPlainModuleCheckPatch();
-	
-	mod = sceKernelLoadModule("flash0:/kd/systemctrl.prx", 0, 0);
-	if (mod >= 0)
-		sceKernelStartModule(mod, 0, NULL, NULL, NULL);
+
+	sceCtrlReadBufferPositive(&pad, 1);
+
+	if (!(pad.Buttons & PSP_CTRL_LTRIGGER))
+	{
+		mod = sceKernelLoadModule("flash0:/kd/systemctrl.prx", 0, 0);
+		if (mod >= 0)
+			sceKernelStartModule(mod, 0, NULL, NULL, NULL);
 
 
-	mod = sceKernelLoadModule("flash0:/vsh/module/vshex.prx", 0, NULL);
-	if (mod >= 0)
-		sceKernelStartModule(mod, 0, NULL, NULL, NULL);
+		mod = sceKernelLoadModule("flash0:/vsh/module/vshex.prx", 0, NULL);
+		if (mod >= 0)
+			sceKernelStartModule(mod, 0, NULL, NULL, NULL);
+	}
 
 	mod = sceKernelLoadModule("flash0:/vsh/module/vshmain_real.prx", 0, NULL);
 	if (mod > 0)
