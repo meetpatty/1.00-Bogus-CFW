@@ -80,6 +80,11 @@ int setupVshParamArgsPatched()
     return 0;
 }
 
+void vvvGetVersionPatched(char *filename, u8 *buf, int len, int a3)
+{
+    strcpy(buf, "release:1.00 Bogus\n");
+}
+
 int OnModuleStart(SceModule *mod)
 {
 	if (strcmp(mod->modname, "game_plugin_module") == 0)
@@ -89,6 +94,11 @@ int OnModuleStart(SceModule *mod)
 
         clearCaches();
 	}
+    else if (strcmp(mod->modname, "sysconf_plugin_module") == 0) {
+        MAKE_CALL(mod->text_addr + 0x818c, vvvGetVersionPatched);
+
+        clearCaches();
+    }
     else if (strcmp(mod->modname, "vsh_module") == 0) {
 
         setupVshParamArgs = mod->text_addr + 0x2cfc;
