@@ -9,7 +9,6 @@
 
 #include "systemctrlmod.h"
 #include "vshctrlmod.h"
-#include "vshexmod.h"
 #include "vshmainmod.h"
 
 PSP_MODULE_INFO("bogusFlasher_app", 0x0800, 1, 0);
@@ -186,10 +185,10 @@ int main()
 	printf("Flashing files...\n");
 
 	sceIoRemove("flash0:/vsh/module/vshmain.prx");
+	sceIoRemove("flash0:/vsh/module/vshex.prx");
 
 	flash_file("flash0:/vsh/module/vshmain.prx", vshmain_buffer, size_vshmain_buffer);
 	flash_file("flash0:/vsh/module/vshmain_real.prx", vshmain_real_buffer, VSHMAIN_REAL_SIZE);
-	flash_file("flash0:/vsh/module/vshex.prx", vshex_buffer, size_vshex_buffer);
 	flash_file("flash0:/kd/systemctrl.prx", systemctrl_buffer, size_systemctrl_buffer);
 	flash_file("flash0:/kd/vshctrl.prx", vshctrl_buffer, size_vshctrl_buffer);
 

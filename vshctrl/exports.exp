@@ -5,4 +5,11 @@ PSP_EXPORT_FUNC_HASH(module_start)
 PSP_EXPORT_VAR_HASH(module_info)
 PSP_EXPORT_END
 
+PSP_EXPORT_START(VshCtrlPrivate, 0, 0x4001)
+PSP_EXPORT_FUNC(getParamSfoKeyDataPatched)
+PSP_EXPORT_FUNC(getParamSfoKeyInfoPatched)
+PSP_EXPORT_FUNC(vvvGetVersionPatched)
+PSP_EXPORT_FUNC(setupVshParamArgsPatched)
+PSP_EXPORT_END
+
 PSP_END_EXPORTS
