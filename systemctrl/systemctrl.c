@@ -45,3 +45,15 @@ int sceKernelCreateThreadPatched(char *name, void *entry, int priority, int stac
 
 	return thid;
 }
+
+void PatchSyscall(u32 funcaddr, void *newfunc)
+{
+	int i;
+    u32 * syscalls = (u32)0x88024330;
+
+	for (i = 0; i < 0x4000; i++)
+	{
+		if (syscalls[i] == funcaddr)
+			syscalls[i] = (u32)newfunc;
+	}
+} 

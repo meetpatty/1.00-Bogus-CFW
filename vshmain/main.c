@@ -35,6 +35,9 @@ int main_thread(SceSize args, void *argp)
 		if (mod >= 0)
 			sceKernelStartModule(mod, 0, NULL, NULL, NULL);
 
+		mod = sceKernelLoadModule("flash0:/kd/vshctrl.prx", 0, NULL);
+		if (mod >= 0)
+			sceKernelStartModule(mod, 0, NULL, NULL, NULL);
 
 		mod = sceKernelLoadModule("flash0:/vsh/module/vshex.prx", 0, NULL);
 		if (mod >= 0)
